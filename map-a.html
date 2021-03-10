@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.80.0">
+  <!-- <title>Starter Template · Bootstrap v4.6</title> -->
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/starter-template/">
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="css/starter-template.css" rel="stylesheet">
+
+  <!-- <meta charset="UTF-8"> -->
+  <title>COVID-19 Cases in Washington (2021)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+  <style>
+    html,
+    body,
+    main
+     {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #fff;
+      padding-top: 0;
+    }
+
+    #map {
+      position:relative;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #fff
+    }
+  </style>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+
+<body>
+  <!-- Uses a bootstrap template to create a navigation bar -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Creates the navigation bar with working links to different pages. Also contains an unclickable tab that
+         represents a disabled/discountinued feature -->
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="map-a.html">COVID-19 Cases</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="map-b.html">Map B</a>
+        </li>
+      </ul>
+      <!-- Creates a search bar for the user to use -->
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+  <main role="main">
+
+  <div id="map"></div>
+
+  </main><!-- /.container -->
+
+  <script>
+    // 1. Create a map object.
+    var mymap = L.map('map', {
+        center: [47.7511, -120.7401],
+        zoom: 3.2,
+        maxZoom: 10,
+        minZoom: 3,
+        detectRetina: true // detect whether the sceen is high resolution or not.
+    });
+    // 2. Add a base map.
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
+    // 3. Add cases GeoJSON Data
+    // Null variable that will hold cases data
+    var cases = null;
+    // Get GeoJSON and put on it on the map when it loads
+    cases = L.geoJson.ajax("assets/covid19cases.geojson", {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("Location: " + feature.properties.Admin2 + ", " + feature.properties.Province_S + " <br /> # of Cases: " + feature.properties.Confirmed);
+        },
+        pointToLayer: function (feature, latlng) {
+            var id = 0;
+            if (feature.properties.Confirmed < 750) { id = 0; }
+            else if (feature.properties.Confirmed >= 750 && feature.properties.Confirmed < 1700)  { id = 1; }
+            else if (feature.properties.Confirmed >= 1700 && feature.properties.Confirmed < 3200) { id = 2; }
+            else if (feature.properties.Confirmed >= 3200 && feature.properties.Confirmed < 7900)  { id = 3; }
+            else { id = 4;} // Wyoming
+            return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-plane marker-color-' + (id + 1).toString() })});
+        },
+        attribution: 'COVID-19 Data &copy; John Hopkins University | United States Data &copy; Mike Bostock, D3 | Base Map &copy; CartoDB | Made By George Thompson'
+    });
+    // Add the cases to the map.
+    cases.addTo(mymap);
+    // 4. build up a set of colors
+    var colors = chroma.scale('YlOrRd').mode('lch').colors(5);
+    // 5. dynamically append style classes to this page. This style classes will be used for colorize the markers.
+    for (i = 0; i < 50; i++) {
+        $('head').append($("<style> .marker-color-" + (i + 1).toString() + " { color: " + colors[i] + "; font-size: 15px; text-shadow: 0 0 3px #ffffff;} </style>"));
+    }
+    // 6. Set function for color ramp
+    var colors2 = chroma.scale('Set3').mode('lch').colors(50);
+    function setColor(state) {
+      var id = 0;
+      if (state == "AL") { id = 0; } // Alabama
+      else if (state == "AK")  { id = 1; } // Alaska
+      else if (state == "AZ")  { id = 2; } // Arizona
+      else if (state == "AR")  { id = 3; } // Arkansas
+      else if (state == "CA")  { id = 4; } // California
+      else if (state == "CO")  { id = 5; } // Colorado
+      else if (state == "CT")  { id = 6; } // Connecticut
+      else if (state == "DE")  { id = 7; } // Delaware
+      else if (state == "FL")  { id = 8; } // Florida
+      else if (state == "GA")  { id = 9; } // Georgia
+      else if (state == "HI")  { id = 10; } // Hawaii
+      else if (state == "ID")  { id = 11; } // Idaho
+      else if (state == "IL")  { id = 12; } // Illinois
+      else if (state == "IN")  { id = 13; } // Indiana
+      else if (state == "IA")  { id = 14; } // Iowa
+      else if (state == "KS")  { id = 15; } // Kansas
+      else if (state == "KY")  { id = 16; } // Kentucky
+      else if (state == "LA")  { id = 17; } // Louisiana
+      else if (state == "ME")  { id = 18; } // Maine
+      else if (state == "MD")  { id = 19; } // Maryland
+      else if (state == "MA")  { id = 20; } // Massachusetts
+      else if (state == "MI")  { id = 21; } // Michigan
+      else if (state == "MN")  { id = 22; } // Minnesota
+      else if (state == "MS")  { id = 23; } // Mississippi
+      else if (state == "MO")  { id = 24; } // Missouri
+      else if (state == "MT")  { id = 25; } // Montana
+      else if (state == "NE")  { id = 26; } // Nebraska
+      else if (state == "NV")  { id = 27; } // Nevada
+      else if (state == "NH")  { id = 28; } // New Hampshire
+      else if (state == "NJ")  { id = 29; } // New Jersey
+      else if (state == "NM")  { id = 30; } // New Mexico
+      else if (state == "NY")  { id = 31; } // New York
+      else if (state == "NC")  { id = 32; } // North Carolina
+      else if (state == "ND")  { id = 33; } // North Dakota
+      else if (state == "OH")  { id = 34; } // Ohio
+      else if (state == "OK")  { id = 35; } // Oklahoma
+      else if (state == "OR")  { id = 36; } // Oregon
+      else if (state == "PA")  { id = 37; } // Pennsylvania
+      else if (state == "RI")  { id = 38; } // Rhode Island
+      else if (state == "SC")  { id = 39; } // South Carolina
+      else if (state == "SD")  { id = 40; } // South Dakota
+      else if (state == "TN")  { id = 41; } // Tennessee
+      else if (state == "TX")  { id = 42; } // Texas
+      else if (state == "UT")  { id = 43; } // Utah
+      else if (state == "VT")  { id = 44; } // Vermont
+      else if (state == "VA")  { id = 45; } // Virginia
+      else if (state == "WA")  { id = 46; } // Washington
+      else if (state == "WV")  { id = 47; } // West Virginia
+      else if (state == "WI")  { id = 48; } // Wisconsin
+      else { id = 49; } // Wyoming
+      return colors2[id];
+    }
+    // 7. Set style function that sets fill color.md to state
+    function style(feature) {
+        return {
+            fillColor: setColor(feature.properties.STATE),
+            fillOpacity: 0.6,
+            weight: 2,
+            opacity: 1,
+            color: '#b4b4b4',
+            dashArray: '4'
+        };
+    }
+    // 8. Add state polygons
+    L.geoJson.ajax("assets/us-states.geojson", {
+        style: style
+    }).addTo(mymap);
+    // 9. Create Leaflet Control Object for Legend
+    var legend = L.control({position: 'topright'});
+    // 10. Function that runs when legend is added to map
+    legend.onAdd = function () {
+        // Create Div Element and Populate it with HTML
+        var div = L.DomUtil.create('div', 'legend');
+        div.innerHTML += '<b># of COVID-19 Cases </b><br />';
+        div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 0.5"></i><p> 7900 - 1200000+ </p>';
+        div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 0.5"></i><p> 3200 - 7900 </p>';
+        div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 0.5"></i><p> 1700 - 3199 </p>';
+        div.innerHTML += '<i style="background: ' + colors[1] + '; opacity: 0.5"></i><p> 750 - 1699 </p>';
+        div.innerHTML += '<i style="background: ' + colors[0] + '; opacity: 0.5"></i><p> <750 </p>';
+        div.innerHTML += '<hr><b> States are separated by color<b><br />';
+        // Return the Legend div containing the HTML content
+        return div;
+    };
+    // 11. Add a legend to map
+    legend.addTo(mymap);
+    // 12. Add a scale bar to map
+    L.control.scale({position: 'bottomleft'}).addTo(mymap);
+  </script>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script>
+    window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
+  </script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
