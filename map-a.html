@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.80.0">
+  <meta name="author" content="George Thompson, and Bootstrap contributors">
+  <meta name="generator" content="">
   <!-- <title>Starter Template · Bootstrap v4.6</title> -->
   <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/starter-template/">
 
@@ -58,6 +58,39 @@
       margin: 0;
       background: #fff
     }
+
+    .legend {
+        line-height: 16px;
+        width: 180px;
+        color: #333333;
+        padding: 6px 8px;
+        background: white;
+        background: rgba(255,255,255,0.5);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+
+    .legend i {
+        width: 16px;
+        height: 16px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.9;
+    }
+
+    .legend img {
+        width: 16px;
+        height: 16px;
+        margin-right: 3px;
+        float: left;
+    }
+
+    .legend p {
+        font-size: 12px;
+        line-height: 16px;
+        margin: 0;
+    }
+
   </style>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
@@ -69,7 +102,7 @@
 <body>
   <!-- Uses a bootstrap template to create a navigation bar -->
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">COVID-19 and Hospital Research</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -79,20 +112,15 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="index.html">Presentation</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="map-a.html">COVID-19 Cases</a>
+          <a class="nav-link" href="map-a.html">COVID-19 Cases<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="map-b.html">Map B</a>
+          <a class="nav-link" href="map-b.html">Hospital Capacities</a>
         </li>
       </ul>
-      <!-- Creates a search bar for the user to use -->
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </div>
   </nav>
 
@@ -128,7 +156,7 @@
             else if (feature.properties.Confirmed >= 1700 && feature.properties.Confirmed < 3200) { id = 2; }
             else if (feature.properties.Confirmed >= 3200 && feature.properties.Confirmed < 7900)  { id = 3; }
             else { id = 4;} // Wyoming
-            return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-plane marker-color-' + (id + 1).toString() })});
+            return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-plus marker-color-' + (id + 1).toString() })});
         },
         attribution: 'COVID-19 Data &copy; John Hopkins University | United States Data &copy; Mike Bostock, D3 | Base Map &copy; CartoDB | Made By George Thompson'
     });
@@ -141,59 +169,9 @@
         $('head').append($("<style> .marker-color-" + (i + 1).toString() + " { color: " + colors[i] + "; font-size: 15px; text-shadow: 0 0 3px #ffffff;} </style>"));
     }
     // 6. Set function for color ramp
-    var colors2 = chroma.scale('Set3').mode('lch').colors(50);
+    var colors2 = chroma.scale('Greys').mode('lch').colors(5);
     function setColor(state) {
-      var id = 0;
-      if (state == "AL") { id = 0; } // Alabama
-      else if (state == "AK")  { id = 1; } // Alaska
-      else if (state == "AZ")  { id = 2; } // Arizona
-      else if (state == "AR")  { id = 3; } // Arkansas
-      else if (state == "CA")  { id = 4; } // California
-      else if (state == "CO")  { id = 5; } // Colorado
-      else if (state == "CT")  { id = 6; } // Connecticut
-      else if (state == "DE")  { id = 7; } // Delaware
-      else if (state == "FL")  { id = 8; } // Florida
-      else if (state == "GA")  { id = 9; } // Georgia
-      else if (state == "HI")  { id = 10; } // Hawaii
-      else if (state == "ID")  { id = 11; } // Idaho
-      else if (state == "IL")  { id = 12; } // Illinois
-      else if (state == "IN")  { id = 13; } // Indiana
-      else if (state == "IA")  { id = 14; } // Iowa
-      else if (state == "KS")  { id = 15; } // Kansas
-      else if (state == "KY")  { id = 16; } // Kentucky
-      else if (state == "LA")  { id = 17; } // Louisiana
-      else if (state == "ME")  { id = 18; } // Maine
-      else if (state == "MD")  { id = 19; } // Maryland
-      else if (state == "MA")  { id = 20; } // Massachusetts
-      else if (state == "MI")  { id = 21; } // Michigan
-      else if (state == "MN")  { id = 22; } // Minnesota
-      else if (state == "MS")  { id = 23; } // Mississippi
-      else if (state == "MO")  { id = 24; } // Missouri
-      else if (state == "MT")  { id = 25; } // Montana
-      else if (state == "NE")  { id = 26; } // Nebraska
-      else if (state == "NV")  { id = 27; } // Nevada
-      else if (state == "NH")  { id = 28; } // New Hampshire
-      else if (state == "NJ")  { id = 29; } // New Jersey
-      else if (state == "NM")  { id = 30; } // New Mexico
-      else if (state == "NY")  { id = 31; } // New York
-      else if (state == "NC")  { id = 32; } // North Carolina
-      else if (state == "ND")  { id = 33; } // North Dakota
-      else if (state == "OH")  { id = 34; } // Ohio
-      else if (state == "OK")  { id = 35; } // Oklahoma
-      else if (state == "OR")  { id = 36; } // Oregon
-      else if (state == "PA")  { id = 37; } // Pennsylvania
-      else if (state == "RI")  { id = 38; } // Rhode Island
-      else if (state == "SC")  { id = 39; } // South Carolina
-      else if (state == "SD")  { id = 40; } // South Dakota
-      else if (state == "TN")  { id = 41; } // Tennessee
-      else if (state == "TX")  { id = 42; } // Texas
-      else if (state == "UT")  { id = 43; } // Utah
-      else if (state == "VT")  { id = 44; } // Vermont
-      else if (state == "VA")  { id = 45; } // Virginia
-      else if (state == "WA")  { id = 46; } // Washington
-      else if (state == "WV")  { id = 47; } // West Virginia
-      else if (state == "WI")  { id = 48; } // Wisconsin
-      else { id = 49; } // Wyoming
+      var id = 3;
       return colors2[id];
     }
     // 7. Set style function that sets fill color.md to state
@@ -218,12 +196,11 @@
         // Create Div Element and Populate it with HTML
         var div = L.DomUtil.create('div', 'legend');
         div.innerHTML += '<b># of COVID-19 Cases </b><br />';
-        div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 0.5"></i><p> 7900 - 1200000+ </p>';
-        div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 0.5"></i><p> 3200 - 7900 </p>';
-        div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 0.5"></i><p> 1700 - 3199 </p>';
-        div.innerHTML += '<i style="background: ' + colors[1] + '; opacity: 0.5"></i><p> 750 - 1699 </p>';
+        div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 0.5"></i><p> 7,900 - 1,200,000+ </p>';
+        div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 0.5"></i><p> 3,200 - 7,900 </p>';
+        div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 0.5"></i><p> 1,700 - 3,199 </p>';
+        div.innerHTML += '<i style="background: ' + colors[1] + '; opacity: 0.5"></i><p> 750 - 1,699 </p>';
         div.innerHTML += '<i style="background: ' + colors[0] + '; opacity: 0.5"></i><p> <750 </p>';
-        div.innerHTML += '<hr><b> States are separated by color<b><br />';
         // Return the Legend div containing the HTML content
         return div;
     };
