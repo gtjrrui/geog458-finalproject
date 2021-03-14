@@ -5,9 +5,9 @@ The goal for the project was to look into the issue of hospital capacities throu
 
 ### Data Sources:
 
-[Hospitals | Homeland Infrastructure Foundation-Level Data (HIFLD)](https://hifld-geoplatform.opendata.arcgis.com/datasets/6ac5e325468c4cb9b905f1728d6fbf0f)
+[Hospitals (2020)| Homeland Infrastructure Foundation-Level Data (HIFLD)](https://hifld-geoplatform.opendata.arcgis.com/datasets/6ac5e325468c4cb9b905f1728d6fbf0f)
 
-[COVID-19 Cases US](https://coronavirus-resources.esri.com/datasets/628578697fb24d8ea4c32fa0c5ae1843_0/data?geometry=-134.374%2C33.957%2C-67.622%2C45.718&where=(Confirmed%20%3E%200))
+[COVID-19 Cases US (2021)](https://coronavirus-resources.esri.com/datasets/628578697fb24d8ea4c32fa0c5ae1843_0/data?geometry=-134.374%2C33.957%2C-67.622%2C45.718&where=(Confirmed%20%3E%200))
 
 ### Applied Libraries:
 * Bootstrap
@@ -19,4 +19,4 @@ The goal for the project was to look into the issue of hospital capacities throu
 * Leaflet
 
 ### Acknowledgement:
-Thank you to Jakob Zhao and Tyler McCrea for teaching the class of GEOG 482 and teaching me and other students the foundation of Advanced Digital Geographies (GEOG 458).
+Thank you to Bo Zhao and Tyler McCrea for teaching the class of GEOG 482 and teaching me and other students the foundation of Advanced Digital Geographies (GEOG 458).
