@@ -142,12 +142,12 @@
     // 2. Add a base map.
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
     // 3. Add cases GeoJSON Data
-    // Null variable that will hold cases data
+    // Null variables that will hold COVID-19 data
     var cases = null;
     // Get GeoJSON and put on it on the map when it loads
     cases = L.geoJson.ajax("assets/covid19cases.geojson", {
         onEachFeature: function (feature, layer) {
-            layer.bindPopup("Location: " + feature.properties.Admin2 + ", " + feature.properties.Province_S + " <br /> # of Cases: " + feature.properties.Confirmed);
+            layer.bindPopup("Location: " + feature.properties.Admin2 + ", " + feature.properties.Province_S + " <br /> # of Total Cases: " + feature.properties.Confirmed);
         },
         pointToLayer: function (feature, latlng) {
             var id = 0;
@@ -195,7 +195,7 @@
     legend.onAdd = function () {
         // Create Div Element and Populate it with HTML
         var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML += '<b># of COVID-19 Cases </b><br />';
+        div.innerHTML += '<b>Total COVID-19 Cases </b><br />';
         div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 0.5"></i><p> 7,900 - 1,200,000+ </p>';
         div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 0.5"></i><p> 3,200 - 7,900 </p>';
         div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 0.5"></i><p> 1,700 - 3,199 </p>';

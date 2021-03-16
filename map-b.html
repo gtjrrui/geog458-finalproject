@@ -143,12 +143,16 @@
     // 2. Add a base map.
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
     // 3. Add cases GeoJSON Data
-    // Null variable that will hold cases data
+    // Null variable that will hold hospital data
     var hospitals = null;
     // Get GeoJSON and put on it on the map when it loads
     hospitals = L.geoJson.ajax("assets/hospitals.geojson", {
         onEachFeature: function (feature, layer) {
+          if (feature.properties.BEDS <= 0) {
+            layer.bindPopup("Hospital Name: " + feature.properties.NAME + "<br />City: " + feature.properties.CITY + "<br />County: " + feature.properties.COUNTY + "<br />STATE: " + feature.properties.STATE + "<br />CAPACITY: NONE");
+          } else {
             layer.bindPopup("Hospital Name: " + feature.properties.NAME + "<br />City: " + feature.properties.CITY + "<br />County: " + feature.properties.COUNTY + "<br />STATE: " + feature.properties.STATE + "<br />CAPACITY: " + feature.properties.BEDS);
+          }
         },
         pointToLayer: function (feature, latlng) {
           var id = 0;
