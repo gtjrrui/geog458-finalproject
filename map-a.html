@@ -137,7 +137,8 @@
         zoom: 3.2,
         maxZoom: 10,
         minZoom: 3,
-        detectRetina: true // detect whether the sceen is high resolution or not.
+        detectRetina: true, // detect whether the sceen is high resolution or not.
+        preferCanvas: true
     });
     // 2. Add a base map.
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
@@ -156,7 +157,7 @@
             else if (feature.properties.Confirmed >= 1700 && feature.properties.Confirmed < 3200) { id = 2; }
             else if (feature.properties.Confirmed >= 3200 && feature.properties.Confirmed < 7900)  { id = 3; }
             else { id = 4;} // Wyoming
-            return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-plus marker-color-' + (id + 1).toString() })});
+            return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-circle marker-color-' + (id + 1).toString() })});
         },
         attribution: 'COVID-19 Data &copy; John Hopkins University | United States Data &copy; Mike Bostock, D3 | Base Map &copy; CartoDB | Made By George Thompson'
     });

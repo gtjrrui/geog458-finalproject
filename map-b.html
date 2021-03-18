@@ -138,12 +138,13 @@
         zoom: 3.2,
         maxZoom: 10,
         minZoom: 3,
-        detectRetina: true // detect whether the sceen is high resolution or not.
+        detectRetina: true, // detect whether the sceen is high resolution or not.
+        preferCanvas: true
     });
     // 2. Add a base map.
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mymap);
-    // 3. Add cases GeoJSON Data
-    // Null variable that will hold hospital data
+    // 3. Add hospital GeoJSON Data
+    // Variables that will hold hospital data
     var hospitals = null;
     // Get GeoJSON and put on it on the map when it loads
     hospitals = L.geoJson.ajax("assets/hospitals.geojson", {
@@ -161,7 +162,7 @@
           else if (feature.properties.BEDS >= 250 && feature.properties.BEDS < 450) { id = 3; }
           else if (feature.properties.BEDS >= 450 && feature.properties.BEDS < 750)  { id = 4; }
           else { id = 5;}
-          return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-building marker-color-' + (id + 1).toString() })});
+          return L.marker(latlng, {icon: L.divIcon({className: 'fa fa-plus marker-color-' + (id + 1).toString() })});
         },
         attribution: 'Hospital Capacity Data &copy; Homeland Infrastructure Foundation-Level Data | United States Data &copy; Mike Bostock, D3 | Base Map &copy; CartoDB | Made By George Thompson'
     });
